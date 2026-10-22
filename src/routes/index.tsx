@@ -1,24 +1,54 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect } from "react";
+import {
+  SiteLayout,
+  Hero,
+  AboutSection,
+  ProductsSection,
+  AquacultureSection,
+  QualitySection,
+  WhySection,
+  GallerySection,
+  ContactSection,
+} from "@/components/site";
+import { useStore } from "@/lib/store";
+import { defaultData } from "@/lib/defaults";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
-  component: Index,
+  head: () => ({
+    meta: [
+      { title: defaultData.settings.seoTitle },
+      { name: "description", content: defaultData.settings.seoDescription },
+      { property: "og:title", content: defaultData.settings.seoTitle },
+      { property: "og:description", content: defaultData.settings.seoDescription },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
+  component: Home,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+function Home() {
+  const { data } = useStore();
+  const { sections, seoTitle, seoDescription } = data.settings;
+
+  // Apply the admin-edited SEO title and description in the browser.
+  useEffect(() => {
+    if (seoTitle) document.title = seoTitle;
+    const meta = document.querySelector('meta[name="description"]');
+    if (meta && seoDescription) meta.setAttribute("content", seoDescription);
+  }, [seoTitle, seoDescription]);
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <SiteLayout>
+      <Hero />
+      {sections.about && <AboutSection />}
+      {sections.products && <ProductsSection />}
+      {sections.aquaculture && <AquacultureSection />}
+      {sections.quality && <QualitySection />}
+      {sections.why && <WhySection />}
+      {sections.gallery && <GallerySection />}
+      {sections.contact && <ContactSection />}
+    </SiteLayout>
   );
 }
