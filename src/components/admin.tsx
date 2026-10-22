@@ -33,7 +33,7 @@ export const isTab = (t: unknown): t is TabId => typeof t === "string" && TABS.s
 
 /* ---------------- small building blocks ---------------- */
 function Field({ label, value, onChange, textarea, type = "text", hint, required, error, placeholder }: {
-  label: string; value: string; onChange: (v: string) => void; textarea?: boolean; type?: string; hint?: string; required?: boolean; error?: string; placeholder?: string;
+  label: string; value: string; onChange: (v: string) => void; textarea?: boolean; type?: string; hint?: string | undefined; required?: boolean; error?: string | undefined; placeholder?: string;
 }) {
   const id = useId();
   return (
@@ -139,7 +139,8 @@ function BlockList({ items, onChange, withImage, addLabel }: { items: Block[]; o
     const j = i + dir;
     if (j < 0 || j >= items.length) return;
     const next = [...items];
-    [next[i], next[j]] = [next[j], next[i]];
+    const [moved] = next.splice(i, 1);
+    if (moved) next.splice(j, 0, moved);
     onChange(next);
   };
   return (
@@ -258,7 +259,7 @@ function WebsiteSettings({ go }: { go: (t: TabId) => void }) {
 }
 
 /* ---------------- Products ---------------- */
-const blankProduct: Product = { id: "", name: "", category: "", description: "", details: "", image: "", availability: AVAILABILITY[0], visible: true };
+const blankProduct: Product = { id: "", name: "", category: "", description: "", details: "", image: "", availability: "Available on Enquiry", visible: true };
 
 function ProductForm({ initial, categories, onSave, onClose }: { initial: Product; categories: string[]; onSave: (p: Product) => void; onClose: () => void }) {
   const [p, setP] = useState(initial);
@@ -585,7 +586,7 @@ function ContactAdmin() {
           <Toggle label="Show social links in footer" checked={s.showSocial} onChange={(v) => set("showSocial", v)} />
           <div className="grid gap-4 md:grid-cols-3">
             {(["linkedin", "facebook", "instagram"] as const).map((k) => (
-              <Field key={k} label={k[0].toUpperCase() + k.slice(1)} placeholder="https://…" value={s.social[k]} onChange={(v) => set("social", { ...s.social, [k]: v })} />
+              <Field key={k} label={k.charAt(0).toUpperCase() + k.slice(1)} placeholder="https://…" value={s.social[k]} onChange={(v) => set("social", { ...s.social, [k]: v })} />
             ))}
           </div>
           <p className="text-xs text-muted-foreground">Only links with an address are shown.</p>
