@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { useStore } from "@/lib/store";
+import { useStore, DEMO_USER, DEMO_PASS } from "@/lib/store";
 
 export const Route = createFileRoute("/admin/login")({
   head: () => ({
@@ -21,6 +21,7 @@ function Login() {
   const [u, setU] = useState("");
   const [p, setP] = useState("");
   const [e, setE] = useState("");
+  const [show, setShow] = useState(false);
   useEffect(() => {
     if (ready && authed) nav({ to: "/admin/dashboard", replace: true });
   }, [ready, authed, nav]);
