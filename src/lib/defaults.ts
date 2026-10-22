@@ -14,6 +14,8 @@ export type GalleryItem = { id: string; title: string; description: string; imag
 export type Block = { id: string; title: string; text: string; image?: string };
 export type EnquiryStatus = "New" | "Contacted" | "Closed";
 export type Enquiry = { id: string; date: string; name: string; company: string; email: string; phone: string; country: string; product: string; quantity: string; type: string; message: string; status: EnquiryStatus };
+export type FooterLink = { id: string; label: string; url: string };
+export const ENQUIRY_STATUSES: EnquiryStatus[] = ["New", "Contacted", "Closed"];
 
 export const ENQUIRY_TYPES = ["Product Enquiry", "Bulk Supply", "Seafood Export Enquiry", "Supplier Partnership", "General Business Enquiry"];
 export const AVAILABILITY = ["Available on Enquiry", "Seasonal", "Made to Order", "Currently Unavailable"];
@@ -40,6 +42,7 @@ export const defaultData = {
     footerIntro: "A seafood, fishing and aquaculture business based in Nagpur, Maharashtra, building dependable relationships with buyers, suppliers and trade partners.",
     showSocial: false,
     social: { linkedin: "", facebook: "", instagram: "" },
+    footerLinks: [] as FooterLink[],
     seoTitle: "AquaPure Seafoods Exim — Seafood, Fishing & Aquaculture",
     seoDescription: "AQUAPURE SEAFOODS EXIM PRIVATE LIMITED — seafood sourcing, fishing and aquaculture business from Nagpur, India. Send a B2B enquiry today.",
     sections: { about: true, products: true, aquaculture: true, quality: true, why: true, gallery: true, contact: true },

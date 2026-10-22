@@ -103,7 +103,12 @@ export function Footer() {
         </div>
         <div>
           <h3 className="font-sans text-sm font-bold uppercase tracking-widest text-on-dark">Quick Links</h3>
-          <ul className="mt-4 space-y-2 text-sm">{NAV.map((n) => <li key={n.to}><Link to={n.to} className="hover:text-aqua">{n.label}</Link></li>)}</ul>
+          <ul className="mt-4 space-y-2 text-sm">
+            {NAV.map((n) => <li key={n.to}><Link to={n.to} className="hover:text-aqua">{n.label}</Link></li>)}
+            {s.footerLinks.filter((l) => l.label && l.url).map((l) => (
+              <li key={l.id}><a href={l.url} target={l.url.startsWith("http") ? "_blank" : undefined} rel="noreferrer" className="hover:text-aqua">{l.label}</a></li>
+            ))}
+          </ul>
         </div>
         <div>
           <h3 className="font-sans text-sm font-bold uppercase tracking-widest text-on-dark">Business Categories</h3>
